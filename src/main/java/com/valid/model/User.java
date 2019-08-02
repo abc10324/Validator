@@ -1,9 +1,15 @@
 package com.valid.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -15,15 +21,27 @@ public class User {
 	@Id
 	@JsonProperty("user_id")
 	@JsonAlias("id")
+	@NotBlank(message="id can't be empty")
+	@Pattern(regexp="^(?!.*\\s)(?=.*[a-zA-Z])(?=.*[0-9]).+$"
+			,message="id format is not valid")
+	@Length(min=6, max=15, message="id length must in {min} to {max}")
 	private String id;
+	
 	@JsonProperty("user_name")
 	@JsonAlias("name")
+	@NotBlank(message="name can't be empty")
 	private String name;
+	
 	@JsonIgnore
 	private String sex;
+	
+	@Email(message="Email is invalid")
 	private String email;
+	
 	@JsonFormat(pattern="yyyy/MM/dd",timezone="GMT+8")
+	@Past(message="birth should be earlier than today")
 	private Date   birth;
+	
 	@JsonIgnore
 	private String phone;
 	

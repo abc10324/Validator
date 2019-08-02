@@ -3,7 +3,7 @@ Gradle web project , generate by eclipse , change structure manually
   
 ## Environment  
  > Project: Gradle  
- > Framework: Spring MVC + Spring Data JPA + Hibernate JPA API  
+ > Framework: Spring MVC + Spring Data JPA + Hibernate JPA API + Hibernate Validator  
  > Server: Tomcat v9.0  
  > Database: Embedded H2  
 
