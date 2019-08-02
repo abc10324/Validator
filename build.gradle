@@ -11,6 +11,9 @@ apply plugin: 'war'
 apply plugin: 'eclipse-wtp'
 
 dependencies {
+	// https://mvnrepository.com/artifact/org.projectlombok/lombok
+	compile group: 'org.projectlombok', name: 'lombok', version: '1.18.8'
+
 	// https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
 	compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
 	

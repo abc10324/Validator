@@ -1,6 +1,7 @@
 package com.valid.config;
 
 import javax.sql.DataSource;
+import javax.validation.Validator;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,6 +14,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
@@ -55,5 +58,16 @@ public class SpringJavaConfig {
 	  return txManager;
 	}
 	
+	@Bean
+	public Validator validator(){
+		return new LocalValidatorFactoryBean();
+	}
+
+	@Bean 
+	public MethodValidationPostProcessor methodValidationPostProcessor(){
+		MethodValidationPostProcessor methodPostProcessor = new MethodValidationPostProcessor();
+		methodPostProcessor.setValidator(validator());
+		return methodPostProcessor;
+	}
 	
 }

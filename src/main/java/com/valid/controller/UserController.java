@@ -1,14 +1,20 @@
 package com.valid.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
+import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +27,7 @@ import com.valid.model.User;
 import com.valid.model.service.UserService;
 
 @RestController
+@Validated
 public class UserController {
 
 	@Autowired
@@ -28,41 +35,32 @@ public class UserController {
 	
 	@PostMapping("/Regist")
 	public Object regist(@Valid @RequestBody User user){
-		Map<String,Object> map = new HashMap<String, Object>();
-		
 		User result = userService.addUser(user);
 		
-		if(result == null) {
-			map.put("error", "id already registed");
-			return map;
-		}
-		
-		return result;
+		return result != null ? result 
+			 : ResponseEntity
+			  .status(400)
+			  .body(Collections.singletonMap("error", "user not existed"));
 	}
 	
 	@GetMapping("/User")
-	public Object findUser(String id){
+	public Object findUser(@NotBlank String id){
 		User result = userService.findUser(id);
 		
-		Map<String,Object> map = new HashMap<String, Object>();
-		
-		if(result == null) 
-			map.put("error", "user not existed");
-		
-		
-		return map.isEmpty() ? result : map;
+		return result != null ? result 
+			 : ResponseEntity
+			  .status(404)
+			  .body(Collections.singletonMap("error", "user not existed"));
 	}
 	
 	@GetMapping("/Users")
 	public Object findUsers(){
 		List<User> result = userService.findAll();
 		
-		Map<String,Object> map = new HashMap<String, Object>();
-		
-		if(result.size() == 0) 
-			map.put("error", "something goes wrong");
-		
-		return map.isEmpty() ? result : map;
+		return result.size() != 0 ? result  
+			 : ResponseEntity
+			  .status(404)
+			  .body(Collections.singletonMap("error", "no user"));
 	}
 	
 	@GetMapping("/Test")
@@ -81,11 +79,28 @@ public class UserController {
 	  MethodArgumentNotValidException ex) {
 	    Map<String, Object> errors = new HashMap<>();
 	    List<String> errorList = new ArrayList<String>();
-	    ex.getBindingResult().getAllErrors().forEach((error) -> {
-	        errorList.add(error.getDefaultMessage());
+	    
+	    ex.getBindingResult().getFieldErrors().forEach((fieldError) -> {
+	    	errorList.add(fieldError.getField() + " : " + fieldError.getDefaultMessage());
 	    });
 	    
 	    errors.put("errors",errorList);
+	    return errors;
+	}
+	
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(ConstraintViolationException.class)
+	public Map<String, Object> handleParameterValidationExceptions(
+			ConstraintViolationException ex) {
+	    Map<String, Object> errors = new HashMap<>();
+	    List<String> errorList = new ArrayList<String>();
+	    
+	    ex.getConstraintViolations().forEach((error) -> {
+	    	errorList.add(((PathImpl)error.getPropertyPath()).getLeafNode().getName() + " : " + error.getMessage());
+	    });
+	    
+	    errors.put("errors",errorList);
+	    
 	    return errors;
 	}
 	
