@@ -5,7 +5,7 @@ Gradle web project , generate by eclipse , change structure manually
  > Project: Gradle  
  > Framework: Spring MVC + Spring Data JPA + Hibernate JPA API + Hibernate Validator  
  > Server: Tomcat v9.0  
- > Database: Embedded H2  
+ > Database: Embedded H2 + Redis(option)  
 
 ## how to use gradleDeploy.bat  
  1.set environment variable TOMCAT_HOME to your tomcat install location (ex:D:\apache-tomcat-9.0.22)  
