@@ -10,6 +10,7 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.redis.core.RedisHash;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -20,6 +21,7 @@ import com.valid.model.util.NotSpace;
 import lombok.Data;
 
 @Entity
+@RedisHash("User")
 @Data
 public class User {
 	@Id

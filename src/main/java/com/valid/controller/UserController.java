@@ -35,12 +35,13 @@ public class UserController {
 	
 	@PostMapping("/Regist")
 	public Object regist(@Valid @RequestBody User user){
+		System.out.println(user);
 		User result = userService.addUser(user);
 		
 		return result != null ? result 
 			 : ResponseEntity
 			  .status(400)
-			  .body(Collections.singletonMap("error", "user not existed"));
+			  .body(Collections.singletonMap("error", "user already existed"));
 	}
 	
 	@GetMapping("/User")
