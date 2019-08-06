@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.valid.model.User;
+import com.valid.model.dao.UserDao;
 import com.valid.model.dao.UserRedisRepo;
 
 @Service
@@ -17,8 +18,11 @@ public class UserService {
 //	@Autowired
 //	private UserRepo userRepo;
 	
+//	@Autowired
+//	private UserRedisRepo userRepo;
+	
 	@Autowired
-	private UserRedisRepo userRepo;
+	private UserDao userRepo;
 	
 	public User addUser(User user) {
 		if(userRepo.findOne(user.getId()) != null)
