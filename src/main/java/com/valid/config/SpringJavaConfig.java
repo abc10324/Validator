@@ -71,6 +71,8 @@ public class SpringJavaConfig {
 		JedisConnectionFactory factory = new JedisConnectionFactory();
 		factory.setHostName("localhost");
 		factory.setPort(6379);
+		factory.setDatabase(0); // default is DB0
+		
 		return factory;
 	}
 	

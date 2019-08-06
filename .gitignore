@@ -8,6 +8,7 @@
 !gradlew
 !gradlew.bat
 !gradleDeploy.bat
+!gradleDebugDeploy.bat
 !settings.gradle
 !gradle/
 !gradle/*
